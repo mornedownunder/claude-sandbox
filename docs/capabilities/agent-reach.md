@@ -5,6 +5,30 @@
 **Installer:** `scripts/install-agent-reach.sh`
 **Upstream:** [Panniantong/Agent-Reach](https://github.com/Panniantong/Agent-Reach) @ `da5044d2` (v1.5.0, MIT)
 
+## Scope — read this before copying the pattern
+
+This repo is a **reference implementation**, the same position it takes on MCP
+servers in `docs/mcp/`. The skill here is installed at **project scope**
+(`.claude/skills/`), so it loads only for sessions inside this repository.
+
+That is deliberately not where a capability like this belongs long term. Agent
+Reach is general — internet access is wanted in every project, not just this
+one — so its durable home is a **Claude Code plugin** installed at user scope,
+exactly the argument `README.md` already makes for the MCP servers.
+
+Why it is still project-scope here:
+
+- Project scope is the only scope that is **version-controlled**. The vendored
+  instructions, the pin, the divergence table and the CI guards are the whole
+  point, and none of them survive a copy into `~/.claude/skills/`.
+- It makes the capability reviewable in a pull request, which is what caught
+  the six security findings recorded in `UPSTREAM.md`.
+
+So: copy the *shape* of this — vendored, pinned, provenance recorded, guarded
+by CI — and move the *location* to a plugin when you want it everywhere. Do
+not hand-copy this directory into `~/.claude/skills/`; that silently drops
+every control above.
+
 ## What it gives us
 
 Agent Reach is an **installer and router**, not a wrapper. It detects which

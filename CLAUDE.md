@@ -20,9 +20,23 @@ scripts/agent-reach-preflight.sh
 
 - exit `0` — the capability is ready; continue.
 - exit `1` — installed but not on `PATH`; export the line it prints.
-- exit `2` — not installed. Do **not** improvise a substitute (no ad-hoc curl
-  scraping, no `pip install agent-reach`). Tell the user it is missing and
-  point them at `scripts/install-agent-reach.sh`.
+- exit `2` — not installed. Say so, and point the user at
+  `scripts/install-agent-reach.sh`. Then fall back to the built-in `WebSearch`
+  and `WebFetch` tools, which are always available and carry their own
+  safeguards.
+  What is banned is **hand-rolling the capability**: ad-hoc `curl` scraping of
+  the platforms this skill covers, installing the CLI yourself, or
+  `pip install agent-reach`. Reaching for a first-class tool is not a
+  workaround; reimplementing a capability that has been deliberately pinned
+  and reviewed is.
+
+**Ephemeral environments** (Claude Code on the web, CI runners) get a fresh
+container every session, so preflight will always return `2` there and any
+install would be discarded when the session ends. Don't install; use
+`WebSearch`/`WebFetch` and say that is what you are doing. The skill's own
+trigger is written very broadly ("MUST USE … anything on the internet") — that
+trigger does not override this. Agent Reach is for machines where preflight
+returns `0`.
 
 Other standing rules for this capability:
 
