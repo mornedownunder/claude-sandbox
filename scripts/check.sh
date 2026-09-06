@@ -7,7 +7,7 @@
 # CI calls this same script, so a green run here means a green run there.
 #
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 
 fails=0
 pass() { printf '  \033[32mok\033[0m   %s\n' "$1"; }
@@ -26,7 +26,11 @@ if command -v shellcheck >/dev/null 2>&1; then
     if shellcheck -S warning "$f"; then pass "$f clean"; else fail "$f has shellcheck warnings"; fi
   done
 else
-  echo "==> shellcheck (not installed, skipped)"
+  echo "==> shellcheck"
+  printf '  \033[33mSKIP\033[0m shellcheck is not installed locally, but CI runs it and\n'
+  printf '       will fail on warnings this run cannot see. Install it:\n'
+  printf '         macOS: brew install shellcheck\n'
+  printf '         Debian/Ubuntu: apt-get install shellcheck\n'
 fi
 
 echo "==> JSON"
