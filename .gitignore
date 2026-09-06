@@ -1,0 +1,15 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+!.env.mcp.example
+
+# Per-developer MCP overrides
+.mcp.local.json
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
