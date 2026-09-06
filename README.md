@@ -28,6 +28,7 @@ This repo declares the MCP servers the project uses in [`.mcp.json`](.mcp.json).
 | [`docs/mcp/00-BRIEF.md`](docs/mcp/00-BRIEF.md) | The brief — intent, research, scope, constraints |
 | [`docs/mcp/01-build-vs-connect.md`](docs/mcp/01-build-vs-connect.md) | When to build vs. install vs. connect, and what belongs in git |
 | [`docs/mcp/02-setup-guide.md`](docs/mcp/02-setup-guide.md) | Verified per-MCP setup, staged in three waves |
+| [`docs/mcp/03-decision.md`](docs/mcp/03-decision.md) | **What each of the five does, and which we adopted — read this first** |
 
 Quick start:
 
@@ -38,5 +39,8 @@ claude                          # approve the project servers when prompted
 /mcp                            # confirm they are connected
 ```
 
-Buffer is intentionally **not** in `.mcp.json` — it publishes to live social
-accounts, so it is added per-machine at `--scope local`. See the setup guide.
+Only **Playwright** and **Apify** are declared. Of the five evaluated:
+Buffer is conditional and added per-machine at `--scope local` because it
+publishes to live social accounts; **Perplexity is deferred** (largely
+duplicated by built-in `WebSearch`/`WebFetch`); **Higgsfield is rejected**
+(duplicates the ElevenLabs creative stack). Reasoning in the decision record.

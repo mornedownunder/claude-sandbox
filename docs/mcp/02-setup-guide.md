@@ -1,5 +1,11 @@
 # Setup Guide — Five MCPs
 
+> **Read [`03-decision.md`](03-decision.md) first.** Not all five were
+> adopted: Playwright and Apify are in `.mcp.json`, Buffer is conditional and
+> per-machine, Perplexity is deferred, and Higgsfield was rejected as
+> duplicative. The sections below remain accurate as setup reference for
+> whichever you enable.
+
 Run these **on your own machine**, not in a remote Claude Code session. Each
 needs either a browser OAuth handshake or a local subprocess, and a remote
 container has neither a browser nor a lifetime.
@@ -30,9 +36,12 @@ instead, and are marked. Confirm them once on your machine; `/mcp` showing
 Do not enable five at once. You will not know which one broke, and the tool
 list will bloat before you have felt the benefit.
 
-- **Wave 1 — read-only, no spend:** Playwright, Perplexity
-- **Wave 2 — costs money:** Apify, Higgsfield
-- **Wave 3 — writes to the world:** Buffer
+- **Wave 1 — adopted, no spend:** Playwright
+- **Wave 2 — adopted, costs money:** Apify (scoped)
+- **Wave 3 — conditional, writes to the world:** Buffer
+
+Perplexity (deferred) and Higgsfield (rejected) are documented below for
+reference only — do not enable them without revisiting the decision record.
 
 Verify with `/mcp` after each wave. Use the next wave only once the previous
 one has actually earned its place in a real task.
@@ -41,7 +50,7 @@ one has actually earned its place in a real task.
 
 ## Wave 1
 
-### Playwright — a real browser
+### Playwright — a real browser  *(ADOPTED)*
 
 Microsoft's official server. Free, local, no account.
 
@@ -65,7 +74,7 @@ plus tabs, network mocking, and storage. Optional capability groups behind
 `--caps` (vision, pdf, devtools, network, storage, testing) — leave off until
 needed.
 
-### Perplexity — live research with citations
+### Perplexity — live research with citations  *(DEFERRED — reference only)*
 
 Needs a key from <https://console.perplexity.ai>. Paid per call.
 
@@ -95,7 +104,7 @@ would have answered.
 
 ## Wave 2
 
-### Apify — scraping at scale
+### Apify — scraping at scale  *(ADOPTED, scoped)*
 
 OAuth, no key needed:
 
@@ -127,7 +136,7 @@ Note `https://mcp.apify.com/sse` is **removed** — streamable HTTP only. Billin
 is per actor run against your Apify credits; set a spend cap in your Apify
 account, not in a prompt.
 
-### Higgsfield — image and video generation
+### Higgsfield — image and video generation  *(REJECTED — reference only)*
 
 > Secondary-sourced. Confirm on first connect.
 
@@ -149,7 +158,7 @@ magnitude of credits.
 
 ## Wave 3
 
-### Buffer — social publishing
+### Buffer — social publishing  *(CONDITIONAL)*
 
 > Secondary-sourced. Confirm on first connect.
 
