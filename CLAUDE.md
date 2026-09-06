@@ -44,3 +44,6 @@ Upstream provenance and upgrade procedure: `.claude/skills/agent-reach/UPSTREAM.
   `UPSTREAM.md` recording repo, SHA, version and licence. Upgrading it is a
   reviewable pull request, never an in-place edit.
 - Shell scripts live in `scripts/`, are executable, and pass `bash -n`.
+- Run `scripts/check.sh` before pushing. CI runs that exact script, so a green
+  run locally is a green run in CI. Add new checks there, never only in the
+  workflow file.
