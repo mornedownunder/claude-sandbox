@@ -1,10 +1,9 @@
 # Setup Guide — Five MCPs
 
 > **Read [`03-decision.md`](03-decision.md) first.** Not all five were
-> adopted: Playwright and Apify are in `.mcp.json`, Buffer is conditional and
-> per-machine, Perplexity is deferred, and Higgsfield was rejected as
-> duplicative. The sections below remain accurate as setup reference for
-> whichever you enable.
+> adopted: Playwright, Apify and Perplexity are in `.mcp.json`; Buffer is
+> deferred until there is a social calendar; Higgsfield was rejected as
+> duplicative. The sections below are setup reference for whichever you enable.
 
 Run these **on your own machine**, not in a remote Claude Code session. Each
 needs either a browser OAuth handshake or a local subprocess, and a remote
@@ -36,12 +35,13 @@ instead, and are marked. Confirm them once on your machine; `/mcp` showing
 Do not enable five at once. You will not know which one broke, and the tool
 list will bloat before you have felt the benefit.
 
-- **Wave 1 — adopted, no spend:** Playwright
-- **Wave 2 — adopted, costs money:** Apify (scoped)
-- **Wave 3 — conditional, writes to the world:** Buffer
+- **Wave 1 — no spend:** Playwright
+- **Wave 2 — costs money:** Perplexity, then Apify (scoped)
+- **Wave 3 — deferred, writes to the world:** Buffer, once there is a social
+  calendar to publish to
 
-Perplexity (deferred) and Higgsfield (rejected) are documented below for
-reference only — do not enable them without revisiting the decision record.
+Higgsfield (rejected) is documented below for reference only — do not enable
+it without revisiting the decision record.
 
 Verify with `/mcp` after each wave. Use the next wave only once the previous
 one has actually earned its place in a real task.
@@ -74,7 +74,7 @@ plus tabs, network mocking, and storage. Optional capability groups behind
 `--caps` (vision, pdf, devtools, network, storage, testing) — leave off until
 needed.
 
-### Perplexity — live research with citations  *(DEFERRED — reference only)*
+### Perplexity — live research with citations  *(ADOPTED)*
 
 Needs a key from <https://console.perplexity.ai>. Paid per call.
 

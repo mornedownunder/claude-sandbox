@@ -94,7 +94,7 @@ RCE-equivalent against untrusted pages via `browser_run_code_unsafe`, and
 do not control while it holds a logged-in profile. Harvesting a course we pay
 for: fine. Crawling the open web: use Apify.
 
-### 3. Perplexity — **DEFER**
+### 3. Perplexity — **ADD** *(revised 2026-09-06 — was DEFER)*
 
 **Function.** Wraps Perplexity's Sonar and Agent APIs: `perplexity_search`
 (ranked results), `perplexity_ask` (fast conversational), `perplexity_reason`
@@ -117,13 +117,59 @@ vendor pages unreachable, which is why two rows in the setup guide are marked
 secondary-sourced. Perplexity fetches server-side, so it routes around that
 entirely.
 
-**Decision.** Defer. Not because it is bad — because it is the one most
-duplicated by what we already have, and paying per call to duplicate a free
-built-in is the exact mistake the source post warns against.
+**Decision — REVISED to ADD.**
 
-**Revisit if:** we start doing research work primarily in remote sessions and
-keep hitting the egress wall; or a research task genuinely needs
-`perplexity_research`-grade depth on a recurring basis.
+The original Defer was a bad call, and the reasoning error is worth recording
+because it is a generalisable one: **the tool was evaluated against the task in
+front of it rather than against the portfolio of work it would actually
+serve.** Looking up MCP setup docs is not citation-critical, so the built-ins
+looked sufficient. That is not representative of what we do.
+
+The skills library is unusually citation-heavy, and several skills are built
+around *formal source hierarchies*:
+
+- **`lead-source-evaluator`** — its entire job is verifying behavioural
+  science claims and citation quality for the LEAD book. It defines a source
+  tier table (peer-reviewed journals as high-confidence primary support).
+- **`course-content-architect`** — runs a Tier 1/2/3 source hierarchy
+  (Tier 1 = peer-reviewed academic, original research) and executes it on
+  `web_search` / `web_fetch` today.
+- **`cogniate-patent-drafter`** — prior art across USPTO, Google Scholar,
+  IEEE, ACM. A missed reference here is materially expensive.
+- **`deal-room-researcher` / `deal-room-evaluator`** — "Primary Sources (Must
+  Cite)", verification of citation accuracy, APA reference lists in investor
+  documents.
+
+Against *that*, the difference is not cosmetic. Built-in `WebSearch` returns
+ranked results and a summary — attribution is at the level of "these pages were
+consulted." Perplexity's Sonar returns **claim-level citations**, and it is a
+**genuinely independent retrieval index**. Two independent indexes is
+triangulation, not redundancy — which is exactly what a source-tier framework
+needs and cannot get from one index alone.
+
+The egress argument also turned out not to be hypothetical: the session that
+produced this analysis *was* a remote one, and three of five vendor pages were
+blocked at the proxy.
+
+**Usage rule (this is what keeps it from being waste):**
+
+- Ordinary lookups, package versions, docs → **built-in `WebSearch`/`WebFetch`**.
+  Free, and sufficient. Do not reach for Perplexity by reflex.
+- A claim heading into something that gets audited — a patent filing, an
+  investor document, a published book, course content → **Perplexity**, for
+  claim-level attribution and a second index.
+- `perplexity_search` by default. `perplexity_research` only when the depth is
+  genuinely warranted; it is the expensive one.
+
+**Caveat that still stands.** Perplexity is a *finder*, not an authority. It
+does not remove the obligation to verify at primary source — least of all for
+patent prior art, where the citation must be confirmed at USPTO or Google
+Patents directly. It shortens the path to the source; it is not the source.
+
+**Scope note.** Declared in this repo's `.mcp.json` as the reference
+implementation. In practice this is a tool that follows the person rather than
+the project — across books, patents, deal rooms and courses — so
+`--scope user` is the more honest home for it in day-to-day work.
 
 ### 4. Higgsfield — **SKIP**
 
@@ -191,18 +237,32 @@ confirming every publish.
 | **Playwright** | Real browser control | **ADD** | No overlap. Unblocks course harvesting and component analysis today; tests our own product. |
 | **Apify** | Scraping at scale | **ADD, scoped** | Real gap for competitor/market content. Not for leads — Apollo owns that. |
 | **Buffer** | Social publishing | **ADD if we post** | Clean gap, completes the chain. Needs confirmation. Local scope, human-gated. |
-| **Perplexity** | Cited live research | **DEFER** | Largely duplicated by built-in WebSearch/WebFetch. Real value only in egress-restricted sessions. |
+| **Perplexity** | Cited live research | **ADD** *(revised)* | Claim-level citations + an independent second index. The skills library runs formal source-tier frameworks; one index cannot triangulate. |
 | **Higgsfield** | Image/video generation | **SKIP** | Near-total overlap with ElevenLabs + `elevenlabs-image-video`. Second credit pool for a handful of models. |
 
-**Net: two servers in `.mcp.json`, one added per-machine, two not added.**
+**Net: three servers in `.mcp.json`, one added per-machine when needed, one
+not added.**
 
 Which is the finding. Five tools were presented as a set; against this
 particular stack, two-and-a-half of them earn their place. The discipline that
 produced that answer — check overlap before capability, and price the cost of
 carry — is more reusable than any of the five.
 
-## Open questions
+## Open questions — resolved 2026-09-06
 
-1. **Does Cogniate run an organic social calendar?** Decides Buffer.
-2. **How much research work happens in remote/sandboxed sessions?** If it
-   becomes the norm, Perplexity moves from Defer to Add.
+1. **Does Cogniate run an organic social calendar?** *Unknown.* Resolution:
+   **do not add Buffer yet.** It is free, and adding it later is a single
+   command — so there is no cost to waiting and a real carry cost to holding a
+   publishing tool with nothing to publish. Add it the day there is a post to
+   schedule.
+2. **How much research work happens in remote sessions?** *Answered by
+   observation* — this work was done in one. Folded into the Perplexity
+   revision above; it is no longer load-bearing on its own.
+
+## Amendment log
+
+- **2026-09-06 — Perplexity: DEFER → ADD.** Original call weighed it against
+  the immediate task instead of the citation-critical portfolio it would serve
+  (`lead-source-evaluator`, `course-content-architect`,
+  `cogniate-patent-drafter`, the deal-room skills). Raised by Morné, who
+  valued it specifically for source trustworthiness. He was right.

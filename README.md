@@ -39,8 +39,8 @@ claude                          # approve the project servers when prompted
 /mcp                            # confirm they are connected
 ```
 
-Only **Playwright** and **Apify** are declared. Of the five evaluated:
-Buffer is conditional and added per-machine at `--scope local` because it
-publishes to live social accounts; **Perplexity is deferred** (largely
-duplicated by built-in `WebSearch`/`WebFetch`); **Higgsfield is rejected**
-(duplicates the ElevenLabs creative stack). Reasoning in the decision record.
+**Playwright**, **Apify** and **Perplexity** are declared. Of the five
+evaluated: **Buffer is deferred** until there is a social calendar to publish
+to — it writes to live accounts, so when added it goes per-machine at
+`--scope local`, human-gated. **Higgsfield is rejected** — it duplicates the
+ElevenLabs creative stack. Reasoning in the decision record.
