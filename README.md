@@ -33,11 +33,16 @@ Agent Reach is wired in as a version-controlled skill at
 pinned to commit `da5044d2`. To install the CLI:
 
 ```bash
+scripts/agent-reach-preflight.sh           # is the capability ready?
 scripts/install-agent-reach.sh --dry-run   # inspect first
 scripts/install-agent-reach.sh             # install into ~/.agent-reach/venv
 export PATH="$HOME/.agent-reach/venv/bin:$PATH"
 agent-reach doctor
 ```
+
+Permissions and an optional `SessionStart` preflight hook are templated in
+[`.claude/settings.example.json`](.claude/settings.example.json) — copy it into
+`.claude/settings.json` after reading it.
 
 > **Do not run `pip install agent-reach`** — that PyPI name is an unrelated
 > project. Use the installer above, which pins the correct GitHub commit.

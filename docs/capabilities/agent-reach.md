@@ -75,33 +75,31 @@ dependencies require the explicit `--system` flag.
 * The pinned SHA is the audit boundary. Bumping it is a reviewable PR, per
   `.claude/skills/agent-reach/UPSTREAM.md`.
 
-## Permission boundary (apply to `.claude/settings.json`)
+## Preflight
 
-Not committed automatically — settings writes are blocked in the hosted
-sandbox. Merge this into `.claude/settings.json` so read-only calls run
-unprompted while credential and install operations still ask:
+The skill ships with the repo and loads in every session; the CLI does not.
+Always check before using the capability:
 
-```json
-{
-  "permissions": {
-    "allow": [
-      "Bash(agent-reach doctor:*)",
-      "Bash(agent-reach version:*)",
-      "Bash(agent-reach check-update:*)",
-      "Bash(agent-reach watch:*)",
-      "Bash(agent-reach format:*)",
-      "Bash(agent-reach install --env=auto)",
-      "Bash(scripts/install-agent-reach.sh --dry-run)"
-    ],
-    "ask": [
-      "Bash(scripts/install-agent-reach.sh:*)",
-      "Bash(agent-reach configure:*)",
-      "Bash(agent-reach setup:*)",
-      "Bash(agent-reach skill:*)"
-    ],
-    "deny": [
-      "Bash(agent-reach uninstall:*)"
-    ]
-  }
-}
+```bash
+scripts/agent-reach-preflight.sh
 ```
+
+`0` = ready, `1` = installed but not on `PATH`, `2` = not installed. On `2`,
+do not improvise a substitute — install it or report it missing.
+
+## Permission boundary
+
+A ready-made permission set and an optional `SessionStart` preflight hook live
+in [`.claude/settings.example.json`](../../.claude/settings.example.json).
+
+Apply it deliberately — merge it into your `.claude/settings.json` rather than
+overwriting, and read it first. Permission grants decide what an agent may do
+without asking, so that edit belongs to a human, not to an agent.
+
+The split it encodes:
+
+| Bucket | Contains | Why |
+|---|---|---|
+| `allow` | preflight, `doctor`, `version`, `check-update`, read-only probe | Read-only and idempotent — prompting for these is pure friction |
+| `ask` | the installer, `configure`, `setup`, `skill` | Writes to disk or attaches credentials — a human should see each one |
+| `deny` | `uninstall` | Destructive, and never something an agent needs to decide |
