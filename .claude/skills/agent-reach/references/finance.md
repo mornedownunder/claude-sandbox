@@ -33,11 +33,21 @@ OpenCLI 只复用用户已经存在且明确控制的浏览器会话。不要自
 `opencli xueqiu login`；没有现成登录态时，让用户先在 Chrome 登录，或显式导入
 雪球所需的最小 Cookie：
 
-```bash
-agent-reach configure --from-browser chrome --platform xueqiu
-```
+LOCAL DIVERGENCE: upstream offered a `--from-browser chrome` flag here that
+reads the user's live Chrome cookie store directly. Removed — it contradicts
+this repo's standing rule that the agent never reads browser cookies
+(CLAUDE.md rule 2, docs/capabilities/agent-reach.md, SKILL.md). Upstream's
+only assurance was a comment claiming it extracts one token; nothing in this
+repo verifies that, and it can change whenever the pin moves. The flag is also
+denied in .claude/settings.example.json.
 
-该配置只读取并保存 `xq_a_token`，不会顺带采集其他平台 Cookie。
+Instead, the user exports the minimum Xueqiu cookie by hand with the
+Cookie-Editor extension, exactly as the other platforms do:
+
+```bash
+# The USER runs this and pastes the value; the agent never does.
+agent-reach configure xueqiu-cookies
+```
 
 ## 验收与失败处理
 

@@ -77,6 +77,27 @@ done < <(find . -name 'SKILL.md' -not -path './.git/*')
 
 # The pinned commit is the audit boundary for vendored content. If UPSTREAM.md
 # and the installer drift apart, we no longer know what we ship.
+# The vendored instruction files are the executable part of this repo — they
+# tell an agent what to do. check.sh validates the shell scripts; these two
+# guards validate the instructions. Both catch real findings from the security
+# review of PR #2, and exist so the next re-vendor cannot silently reintroduce
+# them.
+echo "==> Vendored instructions: no mutable upstream refs"
+if hits=$(grep -rnE 'githubusercontent\.com/[^ ]*/(main|master|HEAD)/' .claude/skills/ 2>/dev/null); then
+  echo "$hits"
+  fail "vendored instructions fetch from a mutable branch — pin to the audited SHA"
+else
+  pass "no mutable-ref URLs under .claude/skills/"
+fi
+
+echo "==> Vendored instructions: no agent-run package installs"
+if hits=$(grep -rnE '`(pipx|pip3?|npm|uv) +(install|upgrade|add)' .claude/skills/ 2>/dev/null); then
+  echo "$hits"
+  fail "vendored instructions tell the agent to install a package — the user installs, pinned"
+else
+  pass "no agent-run package installs under .claude/skills/"
+fi
+
 echo "==> Vendored pin consistency"
 up=".claude/skills/agent-reach/UPSTREAM.md"
 inst="scripts/install-agent-reach.sh"

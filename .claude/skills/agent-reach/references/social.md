@@ -13,7 +13,7 @@
 opencli xiaohongshu search "query" -f yaml
 
 # 读笔记正文+互动数据（用搜索结果里的完整 URL，含 xsec_token）
-opencli xiaohongshu note "NOTE_URL" -f yaml
+opencli xiaohongshu note 'NOTE_URL' -f yaml
 
 # 评论（支持楼中楼）
 opencli xiaohongshu comments NOTE_ID -f yaml
@@ -56,8 +56,8 @@ mcporter call xiaohongshu.get_feed_detail feed_id="..." xsec_token="..." --timeo
 
 ```bash
 xhs search "query"          # 搜索
-xhs read NOTE_ID_OR_URL     # 读笔记（必须用搜索结果中的 URL/ID，不能裸 note_id）
-xhs comments NOTE_ID_OR_URL # 评论
+xhs read 'NOTE_ID_OR_URL'   # 读笔记（必须用搜索结果中的 URL/ID，不能裸 note_id）
+xhs comments 'NOTE_ID_OR_URL' # 评论
 xhs hot                     # 热门
 xhs feed                    # 推荐
 ```
@@ -97,16 +97,16 @@ export TWITTER_CT0="..."
 twitter feed -n 20
 
 # 读取单条推文（含回复）
-twitter tweet URL_OR_ID
+twitter tweet 'URL_OR_ID'
 
 # 读取长文 / X Article
-twitter article URL_OR_ID
+twitter article 'URL_OR_ID'
 
 # 用户时间线
-twitter user-posts @username -n 20
+twitter user-posts '@username' -n 20
 
 # 用户资料
-twitter user @username
+twitter user '@username'
 ```
 
 ### 可能不稳定的命令
@@ -122,13 +122,21 @@ twitter likes
 ### search 失败时的重试链（按序执行，成功即停）
 
 1. 直接重试一次（偶发失败常见）：`twitter search "query" -n 10`
-2. 升级后再试：`pipx upgrade twitter-cli && twitter search "query" -n 10`
-3. 换 OpenCLI 备选（桌面，复用浏览器登录态）：`opencli twitter search "query" -f yaml`
-4. 都不行就改用 `twitter feed` / `twitter user-posts @somebody` 等稳定命令绕路
+2. 换 OpenCLI 备选（桌面，复用浏览器登录态）：`opencli twitter search "query" -f yaml`
+3. 都不行就改用 `twitter feed` / `twitter user-posts @somebody` 等稳定命令绕路
+
+LOCAL DIVERGENCE: upstream's step 2 auto-upgraded the twitter-cli package
+before retrying — an unattended package upgrade triggered by a transient search
+failure, which executes arbitrary install-time code. Removed. If the CLI is genuinely out of
+date, say so and let the user upgrade it.
 
 ### 重要注意事项
 
-> **安装**: `pipx install twitter-cli`（确保 v0.8.5+）
+> **安装（由用户执行，agent 不得自行安装）**: `twitter-cli` v0.8.5+ from PyPI.
+> LOCAL DIVERGENCE: upstream gave an unpinned install command for the agent to
+> run. Unpinned third-party package names are the exact supply-chain
+> risk this repo already guards against for `agent-reach` itself. Ask the user
+> to install it with a pinned version; never install it yourself.
 >
 > **认证**: 只用 Cookie-Editor 手工导出，再显式设置环境变量
 > `TWITTER_AUTH_TOKEN` + `TWITTER_CT0`；不要依赖自动浏览器读取。
@@ -188,7 +196,7 @@ curl -s "https://www.v2ex.com/api/replies/show.json?topic_id=TOPIC_ID&page=1" -H
 ### 用户信息
 
 ```bash
-curl -s "https://www.v2ex.com/api/members/show.json?username=USERNAME" -H "User-Agent: agent-reach/1.0"
+curl -s 'https://www.v2ex.com/api/members/show.json?username=USERNAME' -H 'User-Agent: agent-reach/1.0'
 ```
 
 ### Python 调用示例
@@ -250,7 +258,11 @@ rdt popular --limit 10          # 浏览热门
 rdt all --limit 10              # 浏览 /r/all
 ```
 
-> **安装**: `pipx install 'git+https://github.com/public-clis/rdt-cli.git'`（PyPI 版本落后，需从 GitHub 装 v0.4.2+）。先 `rdt login` 才能搜索和阅读（服务器无浏览器时手动写 Cookie，见 doctor 提示）。
+> **安装（由用户执行，agent 不得自行安装）**: `rdt-cli` v0.4.2+ from
+> github.com/public-clis/rdt-cli (PyPI 版本落后).
+> LOCAL DIVERGENCE: upstream gave an unpinned `git+https://` install for the
+> agent to run — that installs whatever the branch tip holds, with no SHA to
+> audit. Ask the user to install it, pinned to a commit.先 `rdt login` 才能搜索和阅读（服务器无浏览器时手动写 Cookie，见 doctor 提示）。
 > 建议使用 `--yaml` 输出，对 AI agent 更友好。
 
 ### 高级选项：官方 API + PRAW（仅限已有凭证的用户）

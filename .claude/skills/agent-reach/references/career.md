@@ -6,7 +6,7 @@ LinkedIn。
 
 ```bash
 # 获取个人资料
-mcporter call linkedin.get_person_profile linkedin_username="username" sections="experience,education"
+mcporter call linkedin.get_person_profile linkedin_username='username' sections='experience,education'
 
 # 搜索人才
 mcporter call linkedin.search_people keywords="AI engineer" location="Shanghai"
@@ -25,5 +25,5 @@ mcporter call linkedin.search_jobs keywords="software engineer" location="Remote
 如果 MCP 不可用，可以用 Jina Reader：
 
 ```bash
-curl -s "https://r.jina.ai/https://linkedin.com/in/username"
+curl -s 'https://r.jina.ai/https://linkedin.com/in/username'
 ```

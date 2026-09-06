@@ -7,14 +7,14 @@ YouTube、B站、小宇宙播客的字幕和转录。
 ### 获取视频元数据
 
 ```bash
-yt-dlp --dump-json "URL"
+yt-dlp --dump-json 'URL'
 ```
 
 ### 下载字幕
 
 ```bash
 # 下载字幕 (不下载视频)
-yt-dlp --write-sub --write-auto-sub --sub-lang "zh-Hans,zh,en" --skip-download -o "/tmp/%(id)s" "URL"
+yt-dlp --write-sub --write-auto-sub --sub-lang "zh-Hans,zh,en" --skip-download -o '/tmp/%(id)s' 'URL'
 
 # 然后读取 .vtt 文件
 cat /tmp/VIDEO_ID.*.vtt
@@ -26,7 +26,7 @@ cat /tmp/VIDEO_ID.*.vtt
 # 提取评论（best-effort，不保证完整）
 yt-dlp --write-comments --skip-download --write-info-json \
   --extractor-args "youtube:max_comments=20" \
-  -o "/tmp/%(id)s" "URL"
+  -o '/tmp/%(id)s' 'URL'
 # 评论在 .info.json 的 comments 字段中
 ```
 
@@ -46,10 +46,10 @@ yt-dlp --dump-json "ytsearch5:query"
 
 1. 先用上面的 `yt-dlp --write-sub --write-auto-sub` 命令。
 2. 若出现 bot 校验、字幕响应为空或没有生成字幕文件，且 OpenCLI 已连接：
-   `opencli youtube transcript "URL" -f yaml`。
+   `opencli youtube transcript 'URL' -f yaml`。
 3. OpenCLI 若返回 `Caption URL returned empty response`，最多重试 3 次；这是带
    过期时间的字幕 URL 偶发失效，不能把空响应当成“视频没有字幕”。
-4. 仍失败或视频本来就没有字幕：`agent-reach transcribe "URL"` 下载音频转写。
+4. 仍失败或视频本来就没有字幕：`agent-reach transcribe 'URL'` 下载音频转写。
 
 成功标准是实际得到非空字幕/转录内容，不是命令退出码或 `doctor` 的版本探测结果。
 
@@ -57,7 +57,7 @@ yt-dlp --dump-json "ytsearch5:query"
 
 ```bash
 # 视频没有字幕时的兜底：下载音频并用 Whisper 转写（Groq 免费 key 即可）
-agent-reach transcribe "https://www.youtube.com/watch?v=VIDEO_ID"
+agent-reach transcribe 'https://www.youtube.com/watch?v=VIDEO_ID'
 agent-reach transcribe ./local_audio.mp3 -o /tmp/transcript.txt
 ```
 
@@ -109,7 +109,9 @@ curl -s -b /tmp/bili_ck.txt -A "$UA" -e "https://www.bilibili.com/" \
   "https://api.bilibili.com/x/web-interface/search/all/v2?keyword=QUERY&page=1"
 ```
 
-> **安装 bili-cli**: `pipx install bilibili-cli`（上游 2026-03 起停更但实测健康；只读场景无需登录，`bili login` 扫码可解锁动态/收藏等个人功能）。
+> **安装 bili-cli（由用户执行，agent 不得自行安装）**: `bilibili-cli`
+> LOCAL DIVERGENCE: upstream gave an unpinned install command for the agent to
+> run. Ask the user to install it with a pinned version.（上游 2026-03 起停更但实测健康；只读场景无需登录，`bili login` 扫码可解锁动态/收藏等个人功能）。
 
 ## 小宇宙播客 / Xiaoyuzhou Podcast
 

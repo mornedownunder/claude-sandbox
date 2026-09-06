@@ -74,6 +74,19 @@ dependencies require the explicit `--system` flag.
   content an agent reads.
 * The pinned SHA is the audit boundary. Bumping it is a reviewable PR, per
   `.claude/skills/agent-reach/UPSTREAM.md`.
+* **The vendored instructions diverge from upstream on purpose.** A security
+  review of PR #2 found upstream text that routed around the controls above:
+  URLs fetching instructions from a mutable branch, unpinned package installs
+  in an automatic retry chain, and a browser-cookie-reading flag that
+  contradicted the no-login rule. Each change is recorded in `UPSTREAM.md` and
+  must be re-applied after any re-vendor. Two are enforced by `scripts/check.sh`;
+  the rest need a human on the diff.
+* **URLs and IDs from fetched content are attacker-chosen.** Pass them as
+  single-quoted arguments, never interpolated into a command string — double
+  quotes do not stop `$(...)`.
+* **The r.jina.ai path is for public URLs only.** It sends the full URL,
+  including any embedded token or signature, to an unrelated third party, and
+  the content it returns is what the agent then acts on.
 
 ## Preflight
 
@@ -100,6 +113,21 @@ The split it encodes:
 
 | Bucket | Contains | Why |
 |---|---|---|
-| `allow` | preflight, `doctor`, `version`, `check-update`, read-only probe | Read-only and idempotent — prompting for these is pure friction |
-| `ask` | the installer, `configure`, `setup`, `skill` | Writes to disk or attaches credentials — a human should see each one |
-| `deny` | `uninstall` | Destructive, and never something an agent needs to decide |
+| `allow` | preflight, `check.sh`, `doctor`, `version`, `format`, installer `--dry-run` | Read-only and idempotent — prompting for these is pure friction |
+| `ask` | the installer, `install`, `configure`, `setup`, `skill`, `check-update`, and any `pipx`/`pip install` | Writes to disk, reaches upstream, or attaches credentials — a human should see each one |
+| `deny` | `uninstall`, `configure --from-browser` | Destructive, or acquires credentials with no human in the loop |
+
+Three grants were tightened after the PR #2 security review, and the reasoning
+is worth keeping:
+
+- **`watch` was removed.** It appeared in no other file in this repo — not in
+  the skill, not in any reference, not in the command table above. An
+  undocumented subcommand cannot be reviewed, so it cannot be auto-approved.
+- **`install --env=auto` moved to `ask`.** It was justified as a "read-only
+  probe", but that claim rests entirely on an upstream doc, is verified
+  nowhere here, and can change whenever the pin moves.
+- **`check-update` moved to `ask`.** It was the low-friction first step of the
+  upstream-update path the review flagged.
+
+The `allow` bucket's safety depends on the pinned commit. Bumping the pin can
+change what these commands do.
