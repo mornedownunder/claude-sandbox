@@ -266,3 +266,45 @@ carry — is more reusable than any of the five.
   (`lead-source-evaluator`, `course-content-architect`,
   `cogniate-patent-drafter`, the deal-room skills). Raised by Morné, who
   valued it specifically for source trustworthiness. He was right.
+
+---
+
+## Validation log
+
+Config is not correct because it parses. First live session that loaded
+`.mcp.json` surfaced the following.
+
+**2026-09-06 — `--browser chrome` was wrong. Fixed.**
+
+Playwright's tools loaded, and the first real navigation failed:
+
+```
+Chromium distribution 'chrome' is not found at /opt/google/chrome/chrome
+```
+
+`--browser chrome` selects the **branded Google Chrome channel**, which is a
+separate install. The machine had Playwright's bundled Chromium at
+`/opt/pw-browsers/chromium` — the thing `playwright install` actually
+provides — and no Google Chrome. The flag was copied from a setup guide
+without asking what it selected.
+
+Fix: drop `--browser` entirely and use the bundled Chromium. `.mcp.json` and
+the setup guide are corrected, and `npx playwright install chromium` is now
+documented as a per-machine prerequisite.
+
+**Worth keeping:** this defect was invisible to review. The JSON was valid,
+the flag was real, the package version was right, and the server started
+cleanly — it only failed on the first navigation. **A server that appears in
+`/mcp` as connected has proven nothing except that it started.** Smoke-test
+one real call per server before trusting the config.
+
+### Current state
+
+| Server | Status |
+|---|---|
+| Playwright | Config corrected; needs a session restart and one real navigation to confirm |
+| Perplexity | Loaded, but `PERPLEXITY_API_KEY` is unset — will fail on first call until a key is supplied |
+| Apify | Needs a browser OAuth handshake; cannot be completed in a non-interactive session |
+
+None of the three are confirmed working end to end yet. Confirmation is one
+real call each, locally.

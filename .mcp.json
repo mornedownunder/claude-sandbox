@@ -6,9 +6,7 @@
         "-y",
         "@playwright/mcp@0.0.80",
         "--isolated",
-        "--headless",
-        "--browser",
-        "chrome"
+        "--headless"
       ]
     },
     "apify": {
@@ -17,7 +15,10 @@
     },
     "perplexity": {
       "command": "npx",
-      "args": ["-y", "@perplexity-ai/mcp-server@1.2.1"],
+      "args": [
+        "-y",
+        "@perplexity-ai/mcp-server@1.2.1"
+      ],
       "env": {
         "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
       }
