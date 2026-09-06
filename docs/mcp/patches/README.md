@@ -169,3 +169,23 @@ and it is RCE-equivalent against untrusted pages via `browser_run_code_unsafe`.
    fetch path is still wrong.
 2. Confirm `cogniate-course-composer` still prefers Claude in Chrome on an
    attended run, and only reaches for Playwright when Chrome is unavailable.
+
+---
+
+## Anchor verification
+
+**2026-09-06 — all five replacement blocks verified against the live skill
+files.** Each "replace this" block was matched byte-for-byte and found
+**exactly once** in its target file:
+
+| Block | Target | Result |
+|---|---|---|
+| 1a Step 1 fetch block | `website-component-analyzer/SKILL.md` | unique match |
+| 1b Example Use Cases line | `website-component-analyzer/SKILL.md` | unique match |
+| 1c Dynamic content note | `website-component-analyzer/SKILL.md` | unique match |
+| 2a Source access ladder | `cogniate-course-composer/SKILL.md` | unique match |
+| 2b Phase 1 anchor | `cogniate-course-composer/SKILL.md` | unique match |
+
+So these apply cleanly and unambiguously — no guessing at intent, no partial
+matches. If any block later fails to match, the skill has been edited since
+this date; re-read it rather than forcing the patch.
