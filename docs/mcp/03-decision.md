@@ -72,11 +72,11 @@ manage tabs, intercept network. Local, free, no account.
 **Gap it fills.** Two, and both are workflows we already run and are already
 losing on:
 
-- **`cogniate-course-composer` has a harvest phase** that reads external
-  courses on Circle, Teachable and Kajabi. Those are **login-gated**.
-  `WebFetch` cannot authenticate, so the harvest is either manual or
-  incomplete — and the skill itself says content quality depends on
-  harvesting the real source material. Playwright can log in and read.
+- **`cogniate-course-composer`** — *see the correction below; this case is
+  weaker than originally stated.* The skill already deploys "browser-harvest
+  agents (Claude in Chrome)" and prefers driving the user's own logged-in
+  browser. Playwright is a **fallback** for unattended or remote runs, not an
+  unblock.
 - **`website-component-analyzer` calls `web_fetch` for full site HTML.** That
   returns the pre-render shell on any JS-driven site — which is most modern
   marketing sites, i.e. exactly the ones worth deconstructing. Playwright
@@ -86,6 +86,16 @@ Third, unprompted by the source post but arguably the biggest: **end-to-end
 testing of the Cogniate platform itself.** We ship a product. This drives it.
 
 **Overlap.** None. Jam records a screen; it does not automate one.
+
+**Correction (2026-09-06).** The original write-up claimed Playwright would
+unblock the course-composer harvest because `WebFetch` cannot authenticate.
+Reading the skill showed it already has a browser strategy that prefers the
+user's logged-in Chrome — better than Playwright for an attended run. **Two
+justifications became one strong one plus a fallback.** The verdict does not
+change: the `website-component-analyzer` case is unambiguous on its own, and
+platform E2E testing is net-new. But the case was thinner than argued, and the
+error is the same one made on Perplexity — reasoning about a skill from its
+description instead of opening it.
 
 **Decision.** Add, pinned and isolated. **Caveat that matters:** upstream
 states plainly that Playwright MCP is *not a security boundary* — it is
@@ -234,7 +244,7 @@ confirming every publish.
 
 | MCP | Function | Verdict | Reason |
 |---|---|---|---|
-| **Playwright** | Real browser control | **ADD** | No overlap. Unblocks course harvesting and component analysis today; tests our own product. |
+| **Playwright** | Real browser control | **ADD** | No overlap. Fixes component analysis against JS-driven sites; fallback for course harvesting; enables platform E2E testing. |
 | **Apify** | Scraping at scale | **ADD, scoped** | Real gap for competitor/market content. Not for leads — Apollo owns that. |
 | **Buffer** | Social publishing | **ADD if we post** | Clean gap, completes the chain. Needs confirmation. Local scope, human-gated. |
 | **Perplexity** | Cited live research | **ADD** *(revised)* | Claim-level citations + an independent second index. The skills library runs formal source-tier frameworks; one index cannot triangulate. |
@@ -261,6 +271,11 @@ carry — is more reusable than any of the five.
 
 ## Amendment log
 
+- **2026-09-06 — Playwright justification narrowed (verdict unchanged).**
+  `cogniate-course-composer` already drives Claude in Chrome, so Playwright is
+  a fallback there rather than an unblock. `website-component-analyzer` and
+  platform E2E testing carry the decision. Proposed skill edits in
+  [`patches/`](patches/README.md).
 - **2026-09-06 — Perplexity: DEFER → ADD.** Original call weighed it against
   the immediate task instead of the citation-critical portfolio it would serve
   (`lead-source-evaluator`, `course-content-architect`,
