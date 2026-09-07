@@ -1,0 +1,23 @@
+{
+  "skill_name": "prompt-rebuilder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I've got a prompt I use to pull key terms out of supplier contracts and dump them into a spreadsheet. It works maybe 70% of the time — sometimes it invents a renewal date that isn't in the document, sometimes it just gives me prose instead of the table. Here it is: 'Read this contract and extract the important terms into a table.' Can you make this actually reliable?",
+      "expected_output": "Rebuilt prompt with an explicit field list and output schema, an instruction for genuinely-absent fields (so absence is reported rather than invented), success criteria covering schema conformance and no-fabrication, and at least three test cases including a contract with a missing field. Should ask about or assume the field list and label the assumption.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "write me a prompt for generating blog post ideas",
+      "expected_output": "Should surface that the ask is underspecified (audience, topic domain, what makes an idea good) rather than silently inventing them. Should either ask one focused question or proceed with clearly labelled assumptions. Rebuilt prompt should be right-sized — this is low-stakes, so it should NOT return a page of scaffolding.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Here's the system prompt for our support triage agent. It's meant to read an incoming ticket, decide urgency, and route it. Problem is it keeps writing these long explanations of its reasoning back to the customer, and it's started opening tickets in our tracker that nobody asked it to open. 'You are a helpful support triage assistant. Always be thorough. If in doubt, use the create_ticket tool. Explain your reasoning.'",
+      "expected_output": "Should diagnose the two specific causes in the existing prompt: 'If in doubt, use [tool]' causing overtriggering, and 'Explain your reasoning' + 'Always be thorough' causing customer-facing verbosity. Should replace the blanket default with conditional tool guidance, separate internal reasoning from customer-facing output, and cite the overeagerness/blanket-default failure modes.",
+      "files": []
+    }
+  ]
+}
