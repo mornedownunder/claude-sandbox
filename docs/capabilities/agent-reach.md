@@ -37,20 +37,27 @@ steps out of the way — the agent calls the upstream tools directly.
 
 Once installed, an agent working in this repo can read and search:
 
-| Channel | Works out of the box | Needs credentials |
-|---|---|---|
-| Any web URL (Jina Reader) | ✅ | — |
-| GitHub (public repos, code search) | ✅ | — |
-| YouTube (subtitles, 1800+ video sites) | ✅ | — |
-| Bilibili (search, detail, subtitles) | ✅ | — |
-| RSS / Atom feeds | ✅ | — |
-| Exa / web search | ✅ | — |
-| Twitter / X | — | cookies |
-| Reddit | — | login (OpenCLI or `rdt-cli`) |
-| XiaoHongShu (小红书) | — | cookies |
-| LinkedIn | public pages only | cookies for more |
-| Facebook / Instagram | — | desktop OpenCLI only |
-| V2EX, Xiaoyuzhou Podcast, Xueqiu | ✅ | — |
+**Observed on a real install** (macOS, Homebrew Python 3.12, no credentials
+configured): `agent-reach doctor` reports **4 of 15 channels available**.
+
+| Channel | Status on a bare install |
+|---|---|
+| Any web URL (via Jina Reader) | ✅ live |
+| RSS / Atom feeds | ✅ live |
+| Bilibili (search; full features want `bili-cli`) | ✅ live |
+| V2EX (public API) | ✅ live |
+| Full-web semantic search | ❌ needs `mcporter` + Exa MCP |
+| Twitter/X, Reddit, XiaoHongShu, Facebook, Instagram, LinkedIn, Xueqiu, Xiaoyuzhou | ❌ 8 optional channels, each needs credentials |
+
+**This table replaces an earlier one that was wrong.** The first version was
+transcribed from upstream's README and claimed six zero-config channels
+including GitHub and YouTube. A real `doctor` run reports four. Upstream's
+"works out of the box" is a claim about the best case, not a measurement of a
+fresh machine — so this table now records what was observed, and should be
+re-measured rather than re-copied whenever the pin moves.
+
+Run `agent-reach doctor` on your own machine for the current truth; the numbers
+depend on what else you have installed.
 
 ## Install
 
@@ -138,8 +145,42 @@ The split it encodes:
 | Bucket | Contains | Why |
 |---|---|---|
 | `allow` | preflight, `check.sh`, `doctor`, `version`, `format`, installer `--dry-run` | Read-only and idempotent — prompting for these is pure friction |
-| `ask` | the installer, `install`, `configure`, `setup`, `skill`, `check-update`, and any `pipx`/`pip install` | Writes to disk, reaches upstream, or attaches credentials — a human should see each one |
-| `deny` | `uninstall`, `configure --from-browser` | Destructive, or acquires credentials with no human in the loop |
+| `ask` | the installer, `install`, `setup`, `skill`, `check-update`, and any `pipx`/`pip install` | Writes to disk or reaches upstream — a human should see each one |
+| `deny` | `uninstall`, **all of `configure`** | Destructive, or acquires credentials — never an agent's job |
+
+### Why `configure` is denied whole, and what that still cannot do
+
+The first version of this template denied only `configure --from-browser`. That
+was wrong in a way worth recording, because the same mistake is easy to repeat.
+
+**It constrained an argument.** Claude Code's permission docs call this pattern
+fragile by name: a rule that pins a flag is defeated by reordering. The command
+`agent-reach configure --platform xueqiu --from-browser chrome` never matches
+`Bash(agent-reach configure --from-browser:*)`, because the pattern text before
+the wildcard has to match as written. The flag being *present* is not enough —
+it has to be in that position.
+
+Denying the whole subcommand removes the problem: there is no argument left to
+outmanoeuvre, and it matches the invariant this capability already claims —
+credentials are attached by a human, so an agent has no reason to run
+`configure` at all.
+
+**What no permission rule can do.** Permission rules gate tool *execution*. They
+do not stop an agent writing a command into its reply for you to paste. A live
+test of this capability produced exactly that: asked to run the
+cookie-extraction command, the agent did not run it — it printed it, with advice
+on making it succeed. Nothing was executed and no rule was violated, and the
+outcome was still a user one paste away from handing over their cookies.
+
+That gap is covered in `CLAUDE.md` rule 2, which forbids proposing such a
+command at all. Guidance shapes behaviour; it does not enforce a boundary. So
+the honest posture is: **treat any credential command an agent hands you as a
+suggestion to judge, never an instruction to run.**
+
+**One known evasion.** These rules match the command as written, so invoking the
+CLI by its full path — `~/.agent-reach/venv/bin/agent-reach configure ...` —
+would not match. Bash pattern matching is prefix-based and cannot be made
+airtight; a `PreToolUse` hook is the enforcement point if you ever need one.
 
 Three grants were tightened after the PR #2 security review, and the reasoning
 is worth keeping:
