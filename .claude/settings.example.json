@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "_comment": [
+    "TEMPLATE — copy to .claude/settings.json and review before applying.",
+    "Kept as an example on purpose: permission grants decide what an agent may",
+    "do, so a human should be the one to apply them. Merge into an existing",
+    "settings.json rather than overwriting it.",
+    "TRUST NOTE on the SessionStart hook: enabling it means every commit to",
+    "scripts/agent-reach-preflight.sh is code that runs automatically the next",
+    "time a session starts in this directory — including on a contributor's",
+    "branch you checked out to review. That script is therefore security-",
+    "relevant, and changes to it deserve the same scrutiny as a permission",
+    "grant. Do NOT swap it for the installer: an unattended install on session",
+    "boot is exactly the thing the 'ask' bucket below exists to prevent.",
+    "The allow bucket's safety also depends on the pinned upstream commit —",
+    "see .claude/skills/agent-reach/UPSTREAM.md."
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(scripts/agent-reach-preflight.sh)",
+      "Bash(scripts/check.sh)",
+      "Bash(scripts/install-agent-reach.sh --dry-run)",
+      "Bash(agent-reach doctor:*)",
+      "Bash(agent-reach version:*)",
+      "Bash(agent-reach format:*)"
+    ],
+    "ask": [
+      "Bash(scripts/install-agent-reach.sh:*)",
+      "Bash(agent-reach install:*)",
+      "Bash(agent-reach configure:*)",
+      "Bash(agent-reach setup:*)",
+      "Bash(agent-reach skill:*)",
+      "Bash(agent-reach check-update:*)",
+      "Bash(pipx:*)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)"
+    ],
+    "deny": [
+      "Bash(agent-reach uninstall:*)",
+      "Bash(agent-reach configure --from-browser:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/agent-reach-preflight.sh || true"
+          }
+        ]
+      }
+    ]
+  }
+}

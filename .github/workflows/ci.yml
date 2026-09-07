@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only: these checks never need to write to the repo.
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Repo checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Needed for the SKILL.md frontmatter check. Without it the check
+      # degrades to verifying delimiters only, which would pass on malformed
+      # YAML — so install it rather than relying on the fallback.
+      - name: Install PyYAML
+        run: python -m pip install --quiet pyyaml
+
+      # shellcheck ships on ubuntu-latest runners; assert it rather than
+      # silently skipping, so the linting is real in CI.
+      - name: Verify shellcheck is available
+        run: shellcheck --version
+
+      # The same script a contributor runs locally. If these ever diverge,
+      # CI stops being reproducible.
+      - name: Run checks
+        run: scripts/check.sh
