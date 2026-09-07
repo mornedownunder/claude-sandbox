@@ -18,16 +18,19 @@ part.**
 
 ```
 1 ASK      → what is actually wanted, separated from how it was phrased
-2 OUTCOME  → what "done" looks like, checkable by someone else
-3 REBUILD  → the prompt itself
-4 VALIDATE → how the output gets checked, and against what
-5 TEST     → cases it must survive, including one edge and one failure
-6 CORRECT  → critique against criteria, revise, stop
-7 CONFIRM  → show the rebuilt prompt and the assumptions; get sign-off
+2 SIZE     → decide Light or Full. This gates everything below
+3 OUTCOME  → what "done" looks like, checkable by someone else
+4 REBUILD  → the prompt itself
+5 VALIDATE → how the output gets checked          ┐ Full only
+6 TEST     → cases it must survive               ┘
+7 CORRECT  → critique against criteria, revise, stop
+8 CONFIRM  → show the rebuilt prompt and the assumptions; get sign-off
 ```
 
-Work them in order. Steps 1 and 2 are where the value is; skipping to 3 produces
-a nicely-formatted prompt for the wrong task.
+Work them in order. Steps 1 and 3 are where the value is; skipping to 4 produces
+a nicely-formatted prompt for the wrong task. **Step 2 decides how much of the
+rest to do at all** — get it wrong in the heavy direction and you bury a good
+prompt under apparatus nobody asked for.
 
 ---
 
@@ -53,7 +56,45 @@ picking one is how a rebuild produces confident, wrong output.
 If something is genuinely unresolvable and would make the work useless if
 guessed wrong, ask. Otherwise assume, label the assumption, and keep going.
 
-## 2 · Define the outcome
+## 2 · Size the job — Light or Full
+
+Decide this explicitly and early, because it determines what you produce. Getting
+it wrong is this skill's most common failure, and it fails in the heavy
+direction: a one-line ask comes back as a page of scaffolding, the actual prompt
+gets buried, and the user has to dig for the one thing they wanted.
+
+**Full** if any of these hold:
+- It will run more than a handful of times, or feeds a pipeline or product.
+- A wrong output is expensive — money, a filing, a customer, a publication.
+- It is an existing prompt that is failing, and you need criteria to tell whether
+  the fix worked.
+- The user asked for tests, criteria, or evaluation.
+
+**Light** otherwise — a one-off, an exploration, something they will eyeball and
+adjust themselves.
+
+| | Light | Full |
+|---|---|---|
+| The ask, consumer, out of scope | ✅ one or two lines | ✅ |
+| Rebuilt prompt | ✅ | ✅ |
+| Success criteria | Only if they fit in a line | ✅ two to five |
+| Validation method | ✗ | ✅ |
+| Test cases | ✗ | ✅ three |
+| Assumptions | ✅ if any | ✅ |
+
+**Light output should be short enough to read in under thirty seconds.** Close it
+by offering the rest in one line — *"if this is going to run at volume I'd add
+criteria and a few test cases; say the word"* — so the user opts in rather than
+receiving apparatus by default.
+
+State which mode you chose only if it is not obvious. Do not narrate the
+decision.
+
+**When the original prompt is already clear, say so and stop.** "This is fine as
+written; the one thing I would add is X" is a complete and correct answer.
+Rebuilding for the sake of it wastes the user's time and buries the signal.
+
+## 3 · Define the outcome
 
 Write what "done" looks like in terms a third party could check without asking
 you. Vague criteria are the reason prompts cannot be evaluated or improved.
@@ -72,7 +113,7 @@ Most real tasks need **several criteria at once** — task fidelity plus tone pl
 format. Two to five is usually right. One is rarely enough; ten means you have
 not decided what matters.
 
-## 3 · Rebuild the prompt
+## 4 · Rebuild the prompt
 
 Now apply technique. `references/techniques.md` has the full ladder with when to
 use and when to skip each — read it if you are unsure which apply. The core:
@@ -96,22 +137,12 @@ use and when to skip each — read it if you are unsure which apply. The core:
 - **Ask explicitly for "above and beyond"** if you want it. It is not the default
   and will not be inferred from a vague prompt.
 
-### Right-size it
+A prompt is not better for being longer, and every unnecessary constraint is
+another thing to conflict with the real goal. In Light mode a clear paragraph and
+a format note is usually the whole job; examples, XML structure and role framing
+are Full-mode tools. Reach for them when the stakes earn them, not by reflex.
 
-**The failure mode of this skill is turning a one-line ask into a page of
-scaffolding.** A prompt is not better for being longer, and every unnecessary
-constraint is another thing to conflict with the real goal.
-
-Match the investment to the stakes: a one-off request needs a clear sentence and
-maybe a format note. A prompt that will run a thousand times, cost real money, or
-feed a pipeline earns examples, XML structure and a full test set.
-
-**When the original prompt is already clear, say so and stop.** Returning "this
-is fine as written, here is the one thing I would add" is a complete and correct
-answer. Rebuilding for the sake of it wastes the user's time and buries the
-signal.
-
-## 4 · Build the check
+## 5 · Build the check *(Full only)*
 
 State how the output will be verified — this is what makes iteration possible.
 Pick the lightest method that actually discriminates:
@@ -127,7 +158,7 @@ Do not force a number onto something genuinely subjective — a fake metric is
 worse than an honest "this needs your eye", because it launders a guess as
 evidence.
 
-## 5 · Write the test cases
+## 6 · Write the test cases *(Full only)*
 
 Three is usually enough to catch real problems:
 
@@ -141,9 +172,9 @@ For each, state the input and what a pass looks like. If the prompt will run at
 volume, say that a larger held-out set is worth building and why — but do not
 build one unasked.
 
-## 6 · Correct, with a stopping condition
+## 7 · Correct, with a stopping condition
 
-Critique the output against the criteria from step 2 — *not* against a general
+Critique the output against the criteria from step 3 — *not* against a general
 sense of quality, which is unbounded and never converges.
 
 Each round: name what failed and which criterion it failed, change the prompt to
@@ -160,7 +191,7 @@ Diminishing returns are the signal to stop, not to try harder. A rebuild that
 reports "criterion 3 still fails, here is my read on why" is more useful than one
 that quietly claims success.
 
-## 7 · Confirm before executing
+## 8 · Confirm before executing
 
 Present the rebuilt prompt, the criteria, the test cases, and any assumptions —
 then get sign-off before running anything expensive, irreversible or long.

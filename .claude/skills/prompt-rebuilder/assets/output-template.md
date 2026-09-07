@@ -3,6 +3,27 @@
 Adapt freely — this is a shape, not a form to fill. Drop any section that would
 be empty. The rebuilt prompt is the deliverable; everything else supports it.
 
+## Light mode
+
+Most asks. Under thirty seconds to read.
+
+---
+**The ask** — one or two sentences.
+**Out of scope** — if worth stating.
+
+> The rebuilt prompt, ready to copy.
+
+**Assumption** — anything guessed, and what changes if it is wrong.
+
+*Close with one line offering the rest:* "If this is going to run at volume I'd
+add success criteria and a few test cases — say the word."
+
+---
+
+## Full mode
+
+Repeated runs, real cost of error, or the user asked for tests.
+
 ---
 
 **The ask** — what is actually wanted, in one or two sentences.
