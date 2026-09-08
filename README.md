@@ -98,3 +98,12 @@ evaluated: **Buffer is deferred** until there is a social calendar to publish
 to — it writes to live accounts, so when added it goes per-machine at
 `--scope local`, human-gated. **Higgsfield is rejected** — it duplicates the
 ElevenLabs creative stack. Reasoning in the decision record.
+
+## Skills
+
+Project-scoped skills live in `.claude/skills/` and load for any Claude Code
+session opened in this repo — no account sync required.
+
+| Skill | What it does |
+|---|---|
+| [`prompt-rebuilder`](.claude/skills/prompt-rebuilder/) | Rebuilds a rough or underperforming request into a high-quality prompt using Anthropic's prompt engineering guidance, shipped with success criteria, test cases and a bounded self-correction loop. |
