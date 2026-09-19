@@ -55,21 +55,36 @@ one has actually earned its place in a real task.
 Microsoft's official server. Free, local, no account.
 
 ```bash
-npx playwright install chromium      # once per machine
 claude mcp add playwright --scope user -- \
   npx -y @playwright/mcp@0.0.80 --isolated --headless
 ```
+
+**Browser prerequisite — get this right or the first navigation fails.** With no
+`--browser` flag, `@playwright/mcp@0.0.80` uses the **branded Google Chrome
+channel** and expects Chrome already installed. If you have Chrome, there is no
+install step.
+
+On a machine without Chrome (a CI image, a container), install the build this
+version pins and name it explicitly:
+
+```bash
+npx -y @playwright/mcp@0.0.80 install-browser chrome-for-testing
+claude mcp add playwright --scope user -- \
+  npx -y @playwright/mcp@0.0.80 --isolated --headless --browser chromium
+```
+
+`--browser chromium` resolves to *chrome-for-testing* at a pinned build, not to
+whatever `playwright install chromium` happens to have put on disk — those are
+different builds, and mixing them produces "Browser not installed" pointing at a
+directory that does not exist.
 
 - `--isolated` — profile in memory, nothing persisted to disk between runs.
 - `--headless` — no window. Drop it while debugging so you can watch.
 - Pinned to `0.0.80` (latest as of 2026-09-01). `@latest` in a shared config
   means a teammate silently gets a different tool surface than you.
-- **No `--browser` flag, deliberately.** `--browser chrome` selects the
-  *branded Google Chrome channel*, which must be installed separately and is
-  absent on most CI images and sandboxes. Verified the hard way — see the
-  validation log in [`03-decision.md`](03-decision.md). Omitting it uses
-  Playwright's own bundled Chromium, which is what `playwright install`
-  provides and works everywhere.
+- **No `--browser` flag** — but note that the default *is* the Chrome channel,
+  so omitting it is not a way to avoid needing a browser. See the prerequisite
+  above and the validation log in [`03-decision.md`](03-decision.md).
 
 Add `--allowed-origins "example.com;api.example.com"` to fence it to known
 hosts. Treat that as a seatbelt, not a wall — see the security note in

@@ -313,11 +313,40 @@ cleanly — it only failed on the first navigation. **A server that appears in
 `/mcp` as connected has proven nothing except that it started.** Smoke-test
 one real call per server before trusting the config.
 
+**2026-09-19 — the 09-06 fix was wrong. Corrected properly.**
+
+Dropping `--browser chrome` did not help, because **the default is the Chrome
+channel too.** Driving the server directly over stdio with the "corrected"
+config reproduced the identical error. The first fix changed nothing.
+
+What the run actually established:
+
+- No `--browser` → branded Google Chrome channel → needs Chrome installed.
+- `--browser chromium` → resolves to **chrome-for-testing** at a build pinned to
+  the MCP version (chromium-1243 for 0.0.80), installed with
+  `npx @playwright/mcp install-browser chrome-for-testing`.
+- **`npx playwright install chromium` — the prerequisite originally documented —
+  installs a different build** (1194 on this machine) that neither path looks
+  for. The documented prerequisite was wrong, not just incomplete.
+- Supplied a valid binary via `--executable-path`, the whole chain works: server
+  starts, browser launches, navigation is attempted. Only this container's TLS
+  proxy stops it, which is a sandbox artefact, not a config problem.
+
+Installing chrome-for-testing here to finish the proof failed — the browser CDN
+is not on the egress allowlist. So the final green has to happen on a real
+machine.
+
+**The lesson repeats, one level deeper.** The 09-06 entry said a server showing
+as connected has proven only that it started. This is the sequel: *a fix reasoned
+from an error message has proven only that the message was read.* The first fix
+was plausible — the flag named a browser that was missing, so removing it looked
+right — and it was never run. Running it took one command.
+
 ### Current state
 
 | Server | Status |
 |---|---|
-| Playwright | Config corrected; needs a session restart and one real navigation to confirm |
+| Playwright | Config and prerequisite corrected and exercised over stdio; browser launches. Final green needs a machine that can reach the browser CDN |
 | Perplexity | Loaded, but `PERPLEXITY_API_KEY` is unset — will fail on first call until a key is supplied |
 | Apify | Needs a browser OAuth handshake; cannot be completed in a non-interactive session |
 
