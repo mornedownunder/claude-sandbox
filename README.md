@@ -104,6 +104,9 @@ ElevenLabs creative stack. Reasoning in the decision record.
 Project-scoped skills live in `.claude/skills/` and load for any Claude Code
 session opened in this repo — no account sync required.
 
-| Skill | What it does |
+Retired skills move to `_retired/`, which is not read as a skill directory. Each
+carries a `RETIRED.md` saying why, so the reasoning outlives the code.
+
+| Skill | Status |
 |---|---|
-| [`prompt-rebuilder`](.claude/skills/prompt-rebuilder/) | Rebuilds a rough or underperforming request into a high-quality prompt using Anthropic's prompt engineering guidance, shipped with success criteria, test cases and a bounded self-correction loop. |
+| [`prompt-rebuilder`](_retired/prompt-rebuilder/) | **Retired 19 Sep 2026** — duplicated `prompt-clarify` and `prompt-optimise`, which already existed in `cogniate-agents`. See [`RETIRED.md`](_retired/prompt-rebuilder/RETIRED.md). |
