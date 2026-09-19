@@ -58,8 +58,10 @@ each is a judgement call for whoever owns those skills, not a recommendation:
   overtriggering) with the counter-prompts, sourced and dated from
   platform.claude.com.
 
-## Also remove from the account
+## Account copy — removed
 
-This skill was saved to Morné's account skills on 19 Sep. Retiring it here does
-not remove it there — that is a manual deletion in the Claude skills UI, or it
-keeps loading in every session.
+It was saved to the account skills on 19 Sep and **deleted from there on 19 Sep**,
+confirmed by its absence from the session skill list on the following turn. No
+copy of this skill loads anywhere now: not in this repo, not in the account.
+
+Retirement is complete. What remains here is the record.
