@@ -177,11 +177,132 @@ Without a valid treaty claim, US payers withhold 30% on US-source royalties. The
 - The exact ATO ruling paragraph is not pinned.
 - I could not confirm whether there is a newer W-8BEN revision than October 2021.
 
-## 7. Summary table: payer, methods, currencies, non-bank compatibility, notes
+## 7. Hostaway: how money flows for direct bookings and for other channels (Booking.com, Vrbo)
+
+### Takeaway
+Hostaway does not process payments itself. It connects the host's own account with **Stripe, Authorize.net or Braintree**, and Stripe has the most features.
+- **Direct bookings** (Hostaway booking engine, payment links, auto-payments) are charged through the host's Stripe account and pay out wherever that Stripe account pays out.
+- **Airbnb, Booking.com and Vrbo** pay through their own systems:
+  - Airbnb pays the host's payout method (section 1).
+  - Booking.com pays by virtual credit card (VCC), which the host then charges through their own processor, or by bank transfer where offered. Outside the EEA, UK and Switzerland, switching from VCC to bank transfer appears not to be available.
+  - Vrbo pays out through Payoneer to the owner's nominated bank account, in AUD if chosen.
+
+### Cited Findings
+- **Supported gateways:** Hostaway's help centre names Stripe, Authorize.net and Braintree. It points to the providers' own pages for country coverage. — [Hostaway Help: Supported Payment Providers](https://support.hostaway.com/hc/en-us/articles/17817568726683-Hostaway-Supported-Payment-Providers); [Hostaway Help: Payment Providers section](https://support.hostaway.com/hc/en-us/sections/360007657494-Payment-Providers) (undated). I found no Hostaway-branded in-house processor ("Hostaway Payments") in the results.
+- **OTA vs direct bookings:** "OTA bookings are processed through the platform's own payment system". Managers taking direct bookings "must use a PCI-compliant payment processor like Stripe". — [Hostaway glossary: Payment processing](https://www.hostaway.com/glossary/payment-processing/) (undated)
+- **Stripe-only features:** saving payment details for future use and alternative payment methods (Apple Pay, Klarna and others). Payment links via Authorize.net or Braintree are card-only. Pre-authorisations (damage deposits) work with Stripe and Authorize.net, not Braintree. Stripe is the only provider supported where the listing currency differs from the payment account's currency. — [Hostaway: Stripe Integration – Payment Methods & APMs](https://support.hostaway.com/hc/en-us/articles/47174049104923-Stripe-Integration-Configuring-Payment-Methods-APMs); [Payment Link – Save payment details](https://support.hostaway.com/hc/en-us/articles/47220094296091-Payment-Link-Save-payment-details-for-future-use); [Damage Deposit Pre-Authorizations](https://support.hostaway.com/hc/en-us/articles/40916112725147-Creating-Managing-Damage-Deposit-Pre-Authorizations-Automated-Manual); [Listings: Manage Currency Settings](https://support.hostaway.com/hc/en-us/articles/360052756113-Listings-Manage-Currency-Settings) (undated)
+- **Switching or connecting providers:**
+  - Hostaway connects to Stripe only if Braintree is not connected.
+  - Stored card data and Stripe customer profiles are permanently tied to the original Stripe account.
+  - After switching processors, past reservations must still be charged through the previous processor.
+
+  — [Hostaway: Connect and Use Stripe](https://support.hostaway.com/hc/en-us/articles/360002563234-Connecting-and-Using-Stripe); [Hostaway: Automating Guest Payments](https://support.hostaway.com/hc/en-us/articles/360036454133-Guest-Payments-Auto-payments) (undated). The Braintree-or-Stripe-not-both rule comes from an older article; current status unconfirmed.
+- **Hostaway fees on direct bookings (third-party, 2026):**
+  - A 1.8% "Booking Engine Fee" on US-listing Stripe bookings, paid by the guest by default.
+  - Listings outside the US reportedly pay a different rate, described as a 0.5% host processing fee.
+  - An application fee of about 1% on Stripe-processed payments, reported by operators but not published by Hostaway.
+  - "Booking Website Pro", launched April 2026, at about USD 49 a month plus a 0.5% reservation fee.
+  - One review cites a 3.9% processing figure, which conflicts with the others.
+
+  — [Book With Haven: Hostaway direct booking website (2026, competitor)](https://www.bookwithhaven.com/blog/hostaway-direct-booking-website); [RoomMaster: Hostaway pricing 2026](https://www.roommaster.com/blog/hostaway-pricing); [BnB Console: Hostaway pricing 2026](https://bnbconsole.com/blog/hostaway-pricing); [ChargeAutomation guide](https://chargeautomation.com/hostaway-payment-processing-options/) [unverified; confirm in writing with Hostaway]
+- **Booking.com methods:** Booking.com pays "either by virtual credit card (VCC) or bank transfer". Bank transfers can run daily, weekly or monthly after check-out, but "some payout frequencies may not be available in every market". — [Booking.com Partner Help: Understanding Payments by Booking.com](https://partner.booking.com/en-us/help/policies-payments/payment-products/understanding-payments-bookingcom); [Payments by Booking.com FAQs](https://partner.booking.com/en-us/help/policies-payments/payment-products/payments-bookingcom-faqs) (undated)
+- **Booking.com outside Europe:** for properties outside the EEA, UK or Switzerland, there is "no option to switch from virtual credit card to bank transfer payout in your region"; to stop VCCs the host must opt out of Payments by Booking.com. — [Booking.com Partner Help: eligibility and opting in/out (en-gb)](https://partner.booking.com/en-gb/help/policies-payments/payment-products/understanding-payments-bookingcom) (undated; not confirmed specifically for Australia) [unverified for AU]
+- **Booking.com VCCs:** a VCC is a temporary digital Mastercard that the property charges, so the money arrives through the property's own card processor. — [Booking.com Partner Help: virtual credit cards](https://partner.booking.com/en-us/help/policies-payments/payment-products/everything-you-need-know-about-virtual-credit-cards) (undated)
+- **Booking.com bank-transfer fee:** 1% to 3.1% depending on property location. — [AirDNA](https://www.airdna.co/blog/booking.com-host-payout) (third party; possibly outdated) [unverified for AU]
+- **Vrbo currency:** AUD is among the currencies an owner can choose for rates and payouts. Vrbo warns that third-party providers may deduct foreign-currency processing costs where conversion occurs. — [Vrbo AU Terms of Payments](https://www.vrbo.com/en-au/lp/b/terms-of-payments) (undated)
+- **Vrbo payout method:** payouts are disbursed through Payoneer and "can sometimes be converted into another currency before being sent". Owners confirm the payout bank account (last four digits and currency) in the Owner Dashboard. — [Vrbo Help: Bank deposit report](https://help.vrbo.com/articles/What-is-the-Bank-deposit-report); [Vrbo Help: Verify your payout bank account](https://help.vrbo.com/articles/Verify-your-selected-bank-account-for-payouts) (undated)
+- **Vrbo commissions** in Australia are paid via BPAY, not credit card. — [Vrbo Help: Update pay-per-booking billing information](https://help.vrbo.com/articles/How-do-I-update-my-pay-per-booking-billing-information) (undated)
+- **Conflict on Vrbo fees for Australian properties:** Hospitable says a 2.7% processing fee applies when payouts go through Hospitable's Vrbo Partner connection. A third-party guide says AU, NZ and JP properties pay no processing fee. — [Hospitable Help: Vrbo Partner Connection payments](https://help.hospitable.com/en/articles/14643790-vrbo-partner-connection-payments-payouts); [withdrawaltimes.org](https://withdrawaltimes.org/vrbo-withdrawal-time/) (about 13 months old, possibly outdated) [unverified]
+
+### Inferences
+- **Where each channel's money lands:**
+  - Airbnb: the Airbnb payout method.
+  - Vrbo: via Payoneer to the owner's bank.
+  - Booking.com VCC, direct bookings, payment links and damage deposits: all charged through the host's Stripe account (the Hostaway-connected processor), then paid out to the Stripe payout account.
+  - The Stripe payout account is therefore the main receiving point for non-Airbnb income. Its compatibility is covered in section 9.
+- **FX:** for an Australian listing priced in AUD with AUD payouts, no FX step should arise on any channel. FX costs come from mismatched currencies, for example a USD-priced listing paid out in AUD.
+
+### Gaps
+- I could not confirm Hostaway's Australia-specific fee schedule for Stripe bookings.
+- I could not confirm whether Payments by Booking.com bank transfer is offered to Australian properties at all.
+- I could not confirm whether Vrbo's Payoneer-disbursed AUD payouts can go to a Wise, Airwallex or Revolut BSB.
+
+## 8. Upsell and guest-experience tools connected to Hostaway: how they collect and pay out
+
+### Takeaway
+Hostaway's Marketplace lists **Enso Connect, Duve and CheKin** among its guest-experience and upsell partners. Duve and Chekin document collecting guest payments through the **host's own connected Stripe account**; Duve falls back to Payoneer where Stripe is unsupported. Enso Connect's payment rails were not confirmed. Boostly, a direct-booking website, reportedly takes payments through the host's own Stripe account. Its listing on the Hostaway Marketplace was not confirmed.
+
+### Cited Findings
+- **Hostaway Marketplace listings** exist for Enso Connect, Duve and CheKin. The guest-experience category covers guidebooks, upsells and concierge services. — [Hostaway Marketplace: Enso Connect](https://www.hostaway.com/marketplace/enso-connect/); [Duve](https://www.hostaway.com/marketplace/duve/); [CheKin](https://www.hostaway.com/marketplace/chekin/); [Marketplace index](https://www.hostaway.com/marketplace/) (undated)
+- **Duve and Stripe:** Duve's Stripe integration supports security deposits, guest billing and upsells. It is available to customers in Europe, North America and Australia. Upsell payments go to the host's bank or Stripe account, and "if Stripe is not supported in your country Duve will connect you to Payoneer". The connected Stripe account bears all charges and holds for Duve features. — [Duve Help: Stripe Integration](https://helpcenter.duve.com/hc/en-us/articles/7714255786141-Stripe-Integration); [Duve Help: Duve Upsells](https://helpcenter.duve.com/hc/en-us/articles/7805483603357-Duve-Upsells) (undated)
+- **Duve fees:** Duve's upsell service fee excludes Stripe or Payoneer fees. — [Duve Help: Duve Upsells](https://helpcenter.duve.com/hc/en-us/articles/7805483603357-Duve-Upsells) (undated)
+- **Duve and Hostaway sync scope:** sync runs one way from Hostaway to Duve (partial two-way for pre-check-in data), and two-way sync of upsell orders is "not yet supported". — [Duve Help: Hostaway Integration Specs](https://helpcenter.duve.com/hc/en-us/articles/15224659707421-Hostaway-Integration-Specs) (undated)
+- **Enso Connect:** two-way sync with Hostaway via Hostaway's REST API, covering messaging, check-in and upsells. — [Enso Connect: Hostaway integration](https://ensoconnect.com/hostaway/) (vendor). In Guesty, a different PMS, Enso upsells sync to the guest folio "but will not automatically record a payment". — [Guesty Help: Enso Connect](https://help.guesty.com/hc/en-gb/articles/9361711686173-Enso-Connect) (undated; Hostaway behaviour may differ)
+- **Upsell commissions:** Enso about 5%, Duve about 10%. — [Enso Connect comparison page](https://ensoconnect.com/resources/duve-vs-enso-connect-features-pricing-alternatives) (vendor; about 518 days old, possibly outdated) [unverified]
+- **Chekin and Stripe:** "connect a Stripe account to send the balance of the payments in Chekin directly to your Stripe account". An existing Stripe account is detected by email. — [Chekin Help: Connect a Stripe account](https://support.chekin.com/en/connect-a-stripe-account-for-payments-chekin-help-center) (undated)
+- **Chekin's Hostaway listing** covers registration, ID verification, remote access, upselling, tourist taxes and payments. — [Hostaway Marketplace: CheKin](https://www.hostaway.com/marketplace/chekin/)
+- **Boostly** integrates with Hostaway, Guesty, Hospitable, OwnerRez and Lodgify. Its booking engine takes cards "often through Stripe". — [Rakidzich: Boostly review 2026](https://www.rakidzich.com/articles/boostly-direct-booking-website-2026) (third party). A competitor says Boostly processes payments through the host's own Stripe account. — [Book With Haven: Haven vs Boostly](https://www.bookwithhaven.com/compare/haven-vs-boostly) (competitor) [unverified]
+
+### Inferences
+- In practice, the upsell tools route money into the same Stripe account Hostaway uses, or into a separate Stripe account if the host connects a different one, and then to that Stripe account's payout bank. Choosing a reliable Stripe payout account therefore covers direct bookings, deposits and upsells at once.
+- Because Duve upsell orders do not sync back into Hostaway, upsell revenue may need separate reconciliation in Xero, for example from Stripe payout reports.
+
+### Gaps
+- I could not confirm Enso Connect's payment processor for Hostaway users.
+- I could not confirm whether any of these tools use Stripe Connect (where a failed payout disables the external account; see section 9) or the host's standard Stripe account.
+- I could not confirm whether Boostly is listed in the Hostaway Marketplace.
+
+## 9. Stripe Australia payouts: non-bank AUD accounts (Airwallex, Wise, Revolut BSBs) and reported problems
+
+### Takeaway
+Wise states that Stripe can pay out **AUD** to a Wise AUD account (BSB 774001). Stripe's own help explicitly **excludes Wise, Airwallex, "virtual" and neobank accounts** for its **USD/NZD payout** feature for Australian accounts; that feature needs an Australia-based bank account. For plain AUD payouts to Airwallex or Revolut I found no confirmation either way. Stripe's documentation warns of higher payout failures for non-standard accounts.
+
+### Cited Findings
+- **Wise:** "you can receive money from Stripe into your Wise account". Wise lists AUD among the currencies it can receive. The receiving account should be in the country of the currency's issue. You cannot fund Wise transfers from Stripe. — [Wise Help: How do I receive money from Stripe with Wise?](https://wise.com/help/articles/2977935/how-do-i-receive-money-from-stripe-with-wise); [Wise Help: Incompatible accounts and payments](https://wise.com/help/articles/2932118/incompatible-accounts-and-payments) (undated; vendor)
+- **Stripe's USD/NZD feature:** "We're only able to support USD / NZD bank accounts based in Australia and currently do not support virtual bank accounts like Wise for this feature". Unsupported examples include "Wise, Airwallex, Virtual or Neobank account". — [Stripe Support: Receiving USD, NZD payouts for Australia users](https://support.stripe.com/questions/receiving-usd-nzd-payouts-for-australia-users) (undated)
+- **Default payout currency:** Stripe Australia's default is AUD, and foreign-currency charges are converted on payout unless USD/NZD settlement is enabled. — summary of Stripe/Wise pages in search results ([Stripe Support](https://support.stripe.com/questions/receiving-usd-nzd-payouts-for-australia-users); [Wise AU: Stripe fees](https://wise.com/au/blog/stripe-fees)) [unverified wording]
+- **Non-standard accounts:** Stripe's payouts docs warn "you might see higher payout failures" when non-standard accounts are used. — [Stripe Docs: Receive payouts](https://docs.stripe.com/payouts.md) (excerpt only)
+- **Rejected payouts:** banks may reject a payout if the account details on Stripe don't match what the bank has on file (account holder name, currency). — [Stripe Support: Rejected payouts](https://support.stripe.com/questions/rejected-payouts) (undated)
+- **Connect accounts:** when a payout fails, the external account is disabled until it is updated. — [Stripe Docs: Payouts to connected accounts](https://stripe.com/docs/connect/bank-debit-card-payouts); [Stripe error codes](https://docs.stripe.com/error-codes) (`bank_account_bad_routing_numbers` means the account doesn't support the currency)
+- **Wise BSB change:** Wise moved its AUD account details to BSB **774001** and asked users to update platforms such as Stripe. The old BSB 802985 worked only until September 2024. — [Wise Help: We're changing your AUD account details](https://wise.com/help/articles/240ocTVUrwPslKhVXZcQ2u/were-changing-your-aud-account-details) (2024; possibly outdated, but explains a known failure mode)
+- **Third-party commentary:** failed payouts are generally returned rather than lost, but payouts halt until a different account is supplied. A payout account can pass Stripe's initial checks and still be rejected months later. — [StartGlobal: Which bank accounts can receive Stripe payouts?](https://startglobal.co/learn/banking/stripe-payout-account/) (third party) [unverified]
+- I found **no first-hand reports** of AUD Stripe payouts to Wise, Airwallex or Revolut AU accounts being rejected or held. Reddit and Whirlpool were not reachable.
+
+### Inferences
+- An AUD Stripe payout to a traditional Australian bank account is the configuration Stripe supports unambiguously. Wise AUD is vendor-confirmed for AUD. Airwallex and Revolut AUD are unclear.
+- Because Stripe excludes Wise and Airwallex for USD/NZD settlement, a host wanting to receive USD from Stripe without conversion would need a USD account at an Australian bank.
+- The user's Airwallex freezes would affect any Stripe flows paid out to Airwallex. Pointing Stripe at a traditional bank removes that exposure.
+
+### Gaps
+- I could not confirm Stripe's own position on AUD payouts to EMI-held BSBs (Wise, Airwallex, Revolut).
+- I found no Australia-specific user reports of problems.
+
+## 10. Hostaway and Xero: native integration or third party
+
+### Takeaway
+The evidence conflicts. A Hostaway community reply (about 2022) said there was no Xero integration yet, while Capterra lists Xero among Hostaway's integrations. Hostaway does have an official **QuickBooks Online** integration. For Xero, the documented route is **VRPlatform** (listed in Hostaway's Marketplace, accounting category), which syncs Hostaway to QBO, Xero or Intacct. Zapier also offers a Hostaway–Xero connector. **Link My Books** does not list Hostaway or any vacation-rental channel.
+
+### Cited Findings
+- **Older Hostaway position:** "we don't have an integration with Xero yet", with users pointed to the API. A later thread requests a Xero integration, and a reseller offers a custom build. — [Hostaway Community: Reconciling reservation payouts](https://support.hostaway.com/hc/en-us/community/posts/10413177466523-Reconciling-reservation-payouts); [Hostaway Community: Xero integration please](https://support.hostaway.com/hc/en-us/community/posts/30549422583323-Xero-integration-please) (about 2022 and about 2025 respectively; which thread holds which quote was not pinned) [unverified attribution]
+- **Conflicting listing:** Capterra lists Xero among Hostaway's 50+ integrations ("reviewer-confirmed"). — [Capterra: Hostaway](https://www.capterra.com/p/152433/Hostaway/) (2026). Zapier lists a Hostaway–Xero connector. — [Zapier: Hostaway integrations](https://zapier.com/apps/hostaway/integrations)
+- **Native QuickBooks Online integration:** reservations go across as invoices, but individual Hostaway expenses cannot be sent as bills and owner-statement totals cannot be sent. — [Hostaway: QuickBooks Online FAQs](https://support.hostaway.com/hc/en-us/articles/27435948215323-QuickBooks-Online-FAQs); [Hostaway QuickBooks integration](https://www.hostaway.com/features/quickbooks-integration/) (undated)
+- **VRPlatform:** syncs Hostaway to QBO, Xero or Intacct, with automated journal entries and owner statements. It connects via an API key generated from the Accounting category of the Hostaway Marketplace. — [Hostaway blog: Best accounting software for vacation rentals](https://www.hostaway.com/blog/best-accounting-software-for-vacation-rentals/) (about 13 months old, possibly outdated); [Hostaway Marketplace: VRPlatform](https://www.hostaway.com/marketplace/vrplatform/); [VRPlatform: Connect your PMS – Hostaway](https://support.vrplatform.app/en/articles/11164536-connect-your-pms-hostaway-vrtrust)
+- **VRTrust and Xero:** VRTrust can replace Xero, or be configured to post GL activity and statement financials to Xero. It is used in Australia. Its Plaid bank connection is US-only, so international clients upload bank data manually. — [VRPlatform FAQs](https://www.vrplatform.app/resources/faqs); [VRPlatform integrations](https://www.vrplatform.app/integrations) (vendor)
+- **Link My Books** connects Xero to Amazon, Etsy, eBay, TikTok and Shopify, and posts summary entries that match bank deposits, in the original currency where relevant. No Hostaway or vacation-rental channel is listed. — [Xero App Store: Link My Books](https://apps.xero.com/us/app/link-my-books); [Link My Books](https://linkmybooks.com/) (undated)
+
+### Inferences
+- For a single-owner sole trader, an Australian bank feed into Xero, plus Stripe and Airbnb payout reports, may be simpler than VRPlatform's trust-accounting product, which targets property managers. Treat this as an option to evaluate, not a recommendation from a source.
+- Link My Books is built for Amazon Seller Central-style settlements; whether it handles KDP royalties was not established. It is not a Hostaway solution.
+
+### Gaps
+- I could not confirm the current (November 2026) Hostaway Marketplace accounting listings.
+- I did not research Xero bank-feed availability for Wise, Airwallex, Revolut or Stripe here.
+
+## 11. Summary table: payer, methods, currencies, non-bank compatibility, notes
 
 ### Takeaway
 For the user's goals (low FX cost, avoiding provider freezes):
-- **Traditional AU bank, AUD:** fits Airbnb, Kobo, IngramSpark, APRA AMCOS, PPCA and CD Baby (via NPP).
+- **Traditional AU bank, AUD:** fits Airbnb, Kobo, IngramSpark, APRA AMCOS, PPCA, CD Baby (via NPP) and Vrbo (AUD via Payoneer disbursement). It should also be the **Stripe payout account**, which collects Hostaway direct bookings, Booking.com VCC charges, damage deposits and Duve or Chekin upsells.
 - **Wise, in-policy for KDP:** a Wise USD, GBP or EUR account (on KDP's PSP list) is the documented way to avoid Amazon's conversion on foreign marketplaces.
 - **Payoneer, unavoidable for TuneCore:** TuneCore pays non-US artists only through Payoneer.
 - **Airwallex:** technically allowed by KDP, but the user has reason to avoid it.
@@ -191,6 +312,14 @@ For the user's goals (low FX cost, avoiding provider freezes):
 | Payer | Methods for an AU recipient | Currencies | Works with non-bank multi-currency accounts (Airwallex/Wise/Revolut/Payoneer)? | Notes and sources |
 |---|---|---|---|---|
 | **Airbnb** | Bank account (AU BSB); listed globally: PayPal, Payoneer card, international transfer, Western Union, Fast Pay (availability by country) | AUD for AU bank; currency fixed per payout method; Western Union in USD | **Unclear.** Wise vendor guide says yes; no Airbnb statement; no rejection reports found | 3–5 business days for bank transfer, 3–7 for international. Airbnb emails if a payout is returned. [Resource Centre](https://www.airbnb.com.au/resources/hosting-homes/a/how-youll-get-paid-for-hosting-20) (about mid-2025, possibly outdated); [Help 1516](https://www.airbnb.com/help/article/1516); [AU Payments Terms, June 2024](https://assets.airbnb.com/help/Payments_Terms_of_Service_for_Australian_Users_-_English_June_2024.pdf?disposition=inline) |
+| **Hostaway direct bookings** (booking engine, payment links, auto-payments, damage deposits) | Charged via the host's own Stripe, Authorize.net or Braintree account; Hostaway has no in-house processor | Listing currency; Stripe is the only provider supporting a listing currency that differs from the payment account | **Depends on the processor's payout account** (see the Stripe row) | Third-party reports of a 1.8% guest-paid fee (US), 0.5% non-US, about 1% application fee; all [unverified]. [Hostaway providers](https://support.hostaway.com/hc/en-us/articles/17817568726683-Hostaway-Supported-Payment-Providers); [Hostaway glossary](https://www.hostaway.com/glossary/payment-processing/) |
+| **Stripe (Australia)** | Payout to a bank account | AUD default; USD/NZD only to an Australia-based bank account | **Wise AUD: yes** (Wise help). **Wise and Airwallex for USD/NZD: no** (Stripe help). **Airwallex and Revolut AUD: unclear** | Stripe warns of higher failures for non-standard accounts; Wise BSB is now 774001. [Stripe USD/NZD for AU](https://support.stripe.com/questions/receiving-usd-nzd-payouts-for-australia-users); [Wise–Stripe](https://wise.com/help/articles/2977935/how-do-i-receive-money-from-stripe-with-wise); [Stripe payouts docs](https://docs.stripe.com/payouts.md) |
+| **Booking.com** | Payments by Booking.com: VCC (charged through the host's processor, so it lands in Stripe) or bank transfer; outside EEA/UK/CH no switch from VCC to bank transfer | Not confirmed for AU | **Unclear** (bank transfer to EMIs not addressed) | Bank-transfer fee 1–3.1% by location [unverified]. [Booking.com: Understanding Payments](https://partner.booking.com/en-us/help/policies-payments/payment-products/understanding-payments-bookingcom); [VCC guide](https://partner.booking.com/en-us/help/policies-payments/payment-products/everything-you-need-know-about-virtual-credit-cards) |
+| **Vrbo** | Payout to the owner's bank account, disbursed via Payoneer; commission billed via BPAY in AU | AUD selectable for rates and payouts | **Unclear** | Payoneer may convert currency; conflicting fee info for AU. [Vrbo AU terms](https://www.vrbo.com/en-au/lp/b/terms-of-payments); [Vrbo bank deposit report](https://help.vrbo.com/articles/What-is-the-Bank-deposit-report) |
+| **Duve** (upsells, deposits) | Host's connected Stripe account; Payoneer where Stripe is unsupported | Per Stripe account | **Via Stripe's payout account** (see the Stripe row); Payoneer fallback | Available in Australia; upsell orders don't sync back to Hostaway. [Duve Stripe](https://helpcenter.duve.com/hc/en-us/articles/7714255786141-Stripe-Integration); [Duve–Hostaway specs](https://helpcenter.duve.com/hc/en-us/articles/15224659707421-Hostaway-Integration-Specs) |
+| **Chekin** (check-in, upsells, payments) | Host's connected Stripe account | Per Stripe account | **Via Stripe's payout account** | [Chekin: connect Stripe](https://support.chekin.com/en/connect-a-stripe-account-for-payments-chekin-help-center); [Hostaway Marketplace: CheKin](https://www.hostaway.com/marketplace/chekin/) |
+| **Enso Connect** (upsells, guest app) | Payment rails not confirmed | Not confirmed | **Unclear** | Two-way Hostaway sync; about 5% upsell fee (vendor, about 518 days old) [unverified]. [Hostaway Marketplace: Enso](https://www.hostaway.com/marketplace/enso-connect/) |
+| **Boostly** (direct booking site) | Reportedly the host's own Stripe account | Per Stripe account | **Via Stripe's payout account** [unverified] | Hostaway integration reported by third parties; marketplace listing not confirmed. [Rakidzich review](https://www.rakidzich.com/articles/boostly-direct-booking-website-2026) |
 | **Amazon KDP** | EFT (direct deposit); no cheques for AU bank location; wire limited | AUD for all marketplaces to an AU bank (Amazon converts); or sale currency (USD/GBP/EUR) to an account in that currency's country | **Yes for listed PSPs** (Airwallex, Wise, Payoneer, WorldFirst and others) after KYC, required since 1 Aug 2026. **Revolut unclear.** Deposit-taking banks exempt | EFT has no minimum. Name must match. [PSP Updates](https://kdp.amazon.com/en_US/help/topic/G6GLVRHVQZY4V4FX); [PSP FAQ](https://kdp.amazon.com/en_US/help/topic/GD9NN4LS8ZDU8XZ7); [Payment Options](https://kdp.amazon.com/help?topicId=G201365170); [Wise AU guide](https://wise.com/au/blog/receive-payment-kindle-kdp-wise) |
 | **IngramSpark** | Direct deposit | AUD (must be AU-based bank); other currencies exist (details not confirmed) | **Unclear.** "Must be AU based bank" wording | Minimum AUD 25; paid 90 days after month end; currency change once per 180 days. [User Guide v3.3, Aug 2026](https://www.ingramspark.com/hubfs/downloads/user-guide.pdf) |
 | **Draft2Digital** | PayPal, international direct deposit, Payoneer, cheque | USD-denominated thresholds; AUD payout not confirmed | **Payoneer: yes** (native option). Wise/Airwallex/Revolut: unclear | Minimums: PayPal USD 10, direct deposit and Payoneer USD 20, cheque USD 100 (from 1 Nov 2025). PayPal fee 2.5% (max USD 25 non-US). [D2D FAQ](https://draft2digital.com/faq/); [Horror Tree](https://horrortree.com/draft2digital-introduces-new-payment-thresholds-for-authors-starting-november-2025/) |
