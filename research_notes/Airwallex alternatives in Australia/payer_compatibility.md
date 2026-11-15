@@ -334,11 +334,11 @@ For the user's goals (low FX cost, avoiding provider freezes):
 
 ### Inferences
 - **Low-FX, low-freeze setup suggested by the evidence:**
-  1. A traditional Australian bank transaction account as the primary AUD receiver for Airbnb, Kobo (AUD), IngramSpark (AUD), APRA AMCOS, PPCA, CD Baby (NPP) and the KDP Amazon.com.au marketplace.
+  1. A traditional Australian bank transaction account as the primary AUD receiver for Airbnb, Vrbo, the Stripe payout account (covering Hostaway direct bookings, Booking.com VCCs, deposits and Duve or Chekin upsells), Kobo (AUD), IngramSpark (AUD), APRA AMCOS, PPCA, CD Baby (NPP) and the KDP Amazon.com.au marketplace.
   2. A Wise account, which is on KDP's PSP list, holding USD, GBP and EUR local details for KDP's foreign marketplaces, to avoid Amazon's undisclosed conversion margin. Optionally also for Kobo or Apple if paid in USD or GBP.
   3. Payoneer only where it is mandatory (TuneCore).
 - This also spreads the freeze risk: no single EMI holds all income. Moving AUD flows into a traditional bank keeps the core income stream away from any EMI's compliance holds.
-- **Xero:** I did not research Xero bank feeds for Wise or Payoneer here; that belongs to a different research strand.
+- **Xero:** a single traditional-bank feed for most AUD income simplifies Xero reconciliation. Hostaway has no confirmed native Xero sync (section 10). I did not research Xero bank feeds for Wise, Payoneer or Stripe here; that belongs to a different research strand.
 
 ### Gaps
 - The "yes / no / unclear" for Airbnb, IngramSpark, Apple, Kobo, APRA AMCOS and PPCA is "unclear" mainly because I could not read the primary pages in full and found no first-hand reports (Reddit was inaccessible). If confirmation is needed, the next step is a direct fetch of airbnb.com.au/help and kdp.amazon.com/help with those hosts allowed in the session's network settings.
